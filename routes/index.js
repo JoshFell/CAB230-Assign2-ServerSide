@@ -21,7 +21,7 @@ router.get('/countries', function(req, res, next){
     // res.json({
     //   data: rows
     // })
-    res.json(rows);
+    res.status(200).json(rows.map((country) => country.country));
     
   })
   .catch(err => {
