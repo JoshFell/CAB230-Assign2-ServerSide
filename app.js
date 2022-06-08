@@ -9,9 +9,11 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-//knex
 const options = require('./knexfile.js');
 const knex = require('knex')(options);
+
+// const swaggerUI = require('swagger-ui-express');
+// const swaggerDocument = require('./docs/swagger.json');
 
 app.use((req, res, next) => {
   req.db = knex
@@ -30,6 +32,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+// app.get('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerDoc = require("./swagger.json");
+
+app.use("/", swaggerUi.serve);
+app.get(
+  "/",
+  swaggerUi.setup(swaggerDoc, {
+    swaggerOptions: { defaultModelsExpandDepth: -1 }, // Hide schema section
+  })
+);
 
 app.get('/knex', function(req,res,next) {
   req.db.raw("SELECT VERSION()").then(
