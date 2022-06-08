@@ -3,11 +3,6 @@ const req = require('express/lib/request');
 const { status, json } = require('express/lib/response');
 var router = express.Router();
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Assignment 2' });
-// });
-
 router.get('/me', function(req, res, next){
   res.json({
     "name": "Josh Fell", 
@@ -18,9 +13,6 @@ router.get('/me', function(req, res, next){
 router.get('/countries', function(req, res, next){
   req.db.from('data').select('country')
   .then((rows) => {
-    // res.json({
-    //   data: rows
-    // })
     res.status(200).json(rows.map((country) => country.country));
     
   })
@@ -37,11 +29,6 @@ router.get('/volcanoes', function(req, res, next){
   req.db.from('data').select('id','name', 'country', 'region', 'subregion').where('country', '=', req.query.country)
   .then(
     rows => {
-      // res.json({
-      //   Error: false,
-      //   Message: "success",
-      //   data: rows
-      // })
       res.json(rows)
     })
   .catch(err => {
@@ -56,7 +43,6 @@ router.get('/volcanoes', function(req, res, next){
 router.get('/volcano/:id', function(req, res, next){
   req.db.from('data').select('*').where('id', '=', req.params.id)
   .then((rows) => {
-      // res.status(200).json({"volcanoes": rows})
       res.status(200).json(rows[0])
   })
   .catch((error) => {
