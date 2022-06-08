@@ -6,6 +6,9 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/administration');
+var countriesRouter = require('./routes/countries');
+var volcanoesRouter = require('./routes/volcanoes')
 
 var app = express();
 
@@ -33,6 +36,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+// routes
+app.use('/me', adminRouter);
+app.use('/countries', countriesRouter);
+app.use('/', volcanoesRouter);
+
+
 // app.get('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 const swaggerUi = require("swagger-ui-express");
@@ -46,12 +55,12 @@ app.get(
   })
 );
 
-app.get('/knex', function(req,res,next) {
-  req.db.raw("SELECT VERSION()").then(
-  (version) => console.log((version[0][0]))
-  ).catch((err) => { console.log( err); throw err })
-  res.send("Version Logged successfully");
- });
+// app.get('/knex', function(req,res,next) {
+//   req.db.raw("SELECT VERSION()").then(
+//   (version) => console.log((version[0][0]))
+//   ).catch((err) => { console.log( err); throw err })
+//   res.send("Version Logged successfully");
+//  });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
