@@ -2,18 +2,31 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/volcanoes', function(req, res, next){
-    req.db.from('data').select('id','name', 'country', 'region', 'subregion').where('country', '=', req.query.country)
-    .then(
-      rows => {
-        res.json(rows)
-      })
-    .catch(err => {
-      console.log(err);
-      res.json({
-        Error: true,
-        Message: "Country is a required query parameter."
-      })
-    });
+  console.log(req.query);
+  if (req.query.populatedWithin === "5km" || 
+    req.query.populatedWithin === "10km" || 
+    req.query.populatedWithin === "30km" ||
+    req.query.populatedWithin === "100km"){
+      req.db.from('data').select('id','name', 'country', 'region', 'subregion').where('country', '=', req.query.country).andWhere(`population_${req.query.populatedWithin}`, '>', 0)
+      .then(
+        rows => {
+          res.json(rows);
+        })
+      }
+    else{
+      req.db.from('data').select('id','name', 'country', 'region', 'subregion').where('country', '=', req.query.country)
+      .then(
+        rows => {
+          res.json(rows)
+        })
+      .catch(err => {
+        console.log(err);
+        res.json({
+          Error: true,
+          Message: "Country is a required query parameter."
+        })
+      });
+    }
   });
   
   router.get('/volcano/:id', function(req, res, next){
