@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
@@ -12,6 +13,8 @@ var countriesRouter = require('./routes/countries');
 var volcanoesRouter = require('./routes/volcanoes')
 
 var app = express();
+
+app.use(cors());
 
 const options = require('./knexfile.js');
 const knex = require('knex')(options);
